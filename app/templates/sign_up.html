@@ -1,0 +1,75 @@
+<!-- prettier-ignore -->
+{% extends "layout.html" %}
+
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+<h1>{{title}}</h1>
+
+{% block body %}
+<form action="" method="post">
+  {{ form.hidden_tag() }}
+  <p>
+    <!-- prettier-ignore -->
+    {{ form.fullname.label(class="form-label") }}
+    {{ form.fullname(class="form-control") }}
+    {% for error in form.fullname.errors %}
+    <span style="color: red">{{ error }}</span>
+    {% endfor %}
+  </p>
+  <p>
+    <!-- prettier-ignore -->
+    {{ form.email.label(class="form-label") }}
+    {{ form.email(class="form-control") }}
+    {% for error in form.email.errors %}
+    <span style="color: red">{{ error }}</span>
+    {% endfor %}
+  </p>
+  <p>
+    <!-- prettier-ignore -->
+    {{ form.phone_number.label(class="form-label") }}
+    {{ form.phone_number(class="form-control") }}
+    {% for error in form.phone_number.errors %}
+    <span style="color: red">{{ error }}</span>
+    {% endfor %}
+  </p>
+  <p>
+    <!-- prettier-ignore -->
+    {{ form.dob.label(class="form-label") }}
+    {{ form.dob(class="form-control") }}
+    {% for error in form.dob.errors %}
+    <span style="color: red">{{ error }}</span>
+    {% endfor %}
+  </p>
+  <p>
+    <!-- prettier-ignore -->
+    {{ form.gender.label(class="form-label") }}
+    {{ form.gender(class="form-check") }}
+    {% for error in form.gender.errors %}
+    <span style="color: red">{{ error }}</span>
+    {% endfor %}
+  </p>
+  <p>
+    <!-- prettier-ignore -->
+    {{ form.password.label(class="form-label") }}
+    {{ form.password(class="form-control") }}
+    {% for error in form.password.errors %}
+    <span style="color: red">{{ error }}</span>
+    {% endfor %}
+  </p>
+  <p>
+    <!-- prettier-ignore -->
+    {{ form.rePassword.label(class="form-label") }}
+    {{ form.rePassword(class="form-control") }}
+    {% for error in form.rePassword.errors %}
+    <span style="color: red">{{ error }}</span>
+    {% endfor %}
+  </p>
+  <p>
+    <!-- prettier-ignore -->
+    {{ form.submit(class="btn btn-primary") }}
+  </p>
+</form>
+{% endblock %}

@@ -1,5 +1,4 @@
 from app import db
-from datetime import datetime
 from geoalchemy2 import Geometry
 from app import login
 from flask_login import UserMixin
@@ -8,15 +7,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(db.Model, UserMixin):
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
-    fullname = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(50), nullable=False)
+    fullname = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120), nullable=False, unique=True)
+    password = db.Column(db.String, nullable=False)
     phone_number = db.Column(db.String(10), nullable=False, unique=True)
     dob = db.Column(db.String(20), nullable=False)
     gender = db.Column(db.String, nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
-    tickets = db.Relationship("Ticket", backref="user", lazy=True)
+    tickets = db.relationship("Ticket", backref="users", lazy=True)
 
     def set_password(self, password_input):
         self.password = generate_password_hash(password_input)
@@ -29,16 +29,31 @@ class User(db.Model, UserMixin):
         return User.query.get(int(id))
 
 
+movie_distributions = db.Table(
+    "movie_distributions",
+    db.Column("id", db.Integer, primary_key=True),
+    db.Column("cinema_id", db.Integer, db.ForeignKey("cinemas.id"), primary_key=True),
+    db.Column("movie_id", db.Integer, db.ForeignKey("movies.id"), primary_key=True),
+)
+
+
 class Cinema(db.Model):
+    __tablename__ = "cinemas"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     address = db.Column(db.String(255), nullable=False)
     hotline = db.Column(db.String(20))
     geom = db.Column(Geometry("POINT"))
-    movies = db.Relationship("Movie", backref="cinema", lazy=True)
+    movie_distributions = db.relationship(
+        "Movie",
+        secondary=movie_distributions,
+        lazy="subquery",
+        backref=db.backref("cinemas", lazy=True),
+    )
 
 
 class Movie(db.Model):
+    __tablename__ = "movies"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     img = db.Column(db.String, nullable=False)
@@ -50,19 +65,27 @@ class Movie(db.Model):
     running_time = db.Column(db.String(50), nullable=False)
     language = db.Column(db.Text)
     rated = db.Column(db.Text)
-    cinema_id = db.Column(db.Integer, db.ForeignKey("cinema.id"), nullable=False)
+    movie_distributions = db.relationship(
+        "Cinema",
+        secondary=movie_distributions,
+        lazy="subquery",
+        backref=db.backref("movies", lazy=True),
+    )
 
 
 class Movie_showtime(db.Model):
+    __tablename__ = "movie_showtimes"
     id = db.Column(db.Integer, primary_key=True)
     screening_date = db.Column(db.String(50), nullable=False)
     time_start = db.Column(db.String(20))
     seats = db.Column(db.Integer)
-    film_id = db.Column(db.Integer, primary_key=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey("movies.id"), nullable=False)
 
 
 class Ticket(db.Model):
+    __tablename__ = "tickets"
     id = db.Column(db.Integer, primary_key=True)
     price = db.Column(db.String, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    movie_id = db.Column(db.Integer, db.ForeignKey("movie.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    cinema_id = db.Column(db.Integer, db.ForeignKey("cinemas.id"), nullable=False)
+    movie_id = db.Column(db.Integer, db.ForeignKey("movies.id"), nullable=False)

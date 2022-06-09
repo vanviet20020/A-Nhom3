@@ -4,33 +4,39 @@ from wtforms import (
     PasswordField,
     SubmitField,
     BooleanField,
+    FloatField,
+    RadioField,
+    DateField,
 )
 from wtforms.validators import (
     DataRequired,
     Length,
     ValidationError,
     EqualTo,
-    InputRequired,
+    NumberRange,
 )
+from app.models import User
 
-from models import User
 
-
-class signUpForm(FlaskForm):
-    fullname = StringField("Full Name", validators=[DataRequired()])
+class SignUpForm(FlaskForm):
+    fullname = StringField("Họ tên", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
-    phone_number = StringField("Phone Number", validators=[DataRequired()])
-    dob = StringField("DOB", validators=[DataRequired()])
-    gender = StringField("Gender", validators=[DataRequired()])
+    phone_number = StringField("Số điện thoại", validators=[DataRequired()])
+    dob = DateField("Ngày sinh", validators=[DataRequired()])
+    gender = RadioField(
+        "Giới tính",
+        choices=["Nam", "Nữ", "Khác"],
+    )
+
     password = PasswordField(
-        "Password",
+        "Mật khẩu",
         validators=[
             DataRequired(),
             Length(min=6, message=("Your password is too short.")),
         ],
     )
     rePassword = PasswordField(
-        "reType Password",
+        "Nhập lại mật khẩu",
         validators=[
             DataRequired(),
             EqualTo("password", message="Passwords must match"),
@@ -53,8 +59,8 @@ class signUpForm(FlaskForm):
             )
 
 
-class loginForm(FlaskForm):
+class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    remember_me = BooleanField("Remember me")
+    password = PasswordField("Mật khẩu", validators=[DataRequired()])
+    remember_me = BooleanField("Nhớ tài khoản")
     submit = SubmitField("Sign In")

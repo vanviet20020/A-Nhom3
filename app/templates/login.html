@@ -1,0 +1,46 @@
+<!-- prettier-ignore -->
+{% extends "layout.html" %}
+
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+<h1>{{title}}</h1>
+
+{% block body %}
+<form action="" method="post">
+  {{ form.hidden_tag() }}
+  <p>
+    {{ form.email.label }}<br />
+    {{ form.email(class="form-control") }}<br />
+    {% for error in form.email.errors %}
+    <span style="color: red">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {{ form.password.label }}<br />
+    {{ form.password(class="form-control") }}<br />
+    {% for error in form.password.errors %}
+    <span style="color: red">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <div class="sign_up">
+    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+  </div>
+  <p>{{ form.submit(class="btn btn-primary") }}</p>
+  <p>
+    Chưa có tài khoản?
+    <a href="{{ url_for('sign_up') }}">Tạo tài khoản ngay!</a>
+  </p>
+</form>
+  <!-- prettier-ignore -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages[0] %} 
+    <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
+    <script>
+        alert(document.getElementById('hiddenElement').value);
+    </script>
+    {% endif %}
+  {% endwith %}
+{% endblock %}
