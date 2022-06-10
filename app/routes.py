@@ -14,7 +14,7 @@ def index():
 @app.route("/signUp", methods=["GET", "POST"])
 def sign_up():
     # tạo biến form từ class SignUpForm bên form.py
-    form = UserForm()
+    form = SignUpUser()
     if form.validate_on_submit():
         fullname = form.fullname.data
         email = form.email.data
@@ -34,7 +34,7 @@ def sign_up():
         db.session.add(new_user)
         db.session.commit()
         flash("Đăng nhập ngay")
-        return redirect(url_for("login", title="Đăng nhập"))
+        return redirect(url_for("login"))
     return render_template("sign_up.html", form=form, title="Đăng kí người dùng")
 
 
@@ -42,7 +42,7 @@ def sign_up():
 def login():
     # Nếu người dùng đã đăng nhập mà vào route này sẽ trả về index()
     if current_user.is_authenticated:
-        return redirect(url_for("index", title="Trang chủ"))
+        return redirect(url_for("index"))
 
     # Nếu người dùng chưa đăng nhập mà vào route này sẽ trả về login.html
     form = LoginForm()
@@ -56,7 +56,7 @@ def login():
         # Hàm lưu tên tài khoản khi đăng nhập thành công
         login_user(user, remember=form.remember_me.data)
         flash("Đăng nhập thành công!")
-        return redirect(url_for("index", title="Trang chủ"))
+        return redirect(url_for("index"))
     return render_template("login.html", title="Đăng nhập", form=form)
 
 
@@ -64,7 +64,7 @@ def login():
 def logout():
     logout_user()
     flash("Đăng xuất thành công!")
-    return redirect(url_for("index", title="Trang chủ"))
+    return redirect(url_for("index"))
 
 
 @app.route("/manager/users")
@@ -88,13 +88,13 @@ def delete_user(id_user):
     db.session.delete(user)
     db.session.commit()
     flash("Xóa tài khoản thành công")
-    return redirect(url_for("users_manager", title="Quản lý tài khoản người dùng"))
+    return redirect(url_for("users_manager"))
 
 
 @app.route("/manager/user/update/<int:id_user>", methods=["GET", "POST"])
 def update_user(id_user):
     user = User.query.get(id_user)
-    form = UserForm()
+    form = UpdateUser()
     if form.validate_on_submit():
         id_user = int(request.form.get("id_user"))
         user = User.query.get(id_user)
@@ -102,10 +102,15 @@ def update_user(id_user):
         user.phone_number = form.phone_number.data
         user.dob = form.dob.data
         user.gender = form.gender.data
-        user.is_admin = form.is_admin.data
+        is_admin = form.is_admin.data
+        if is_admin == "True":
+            new_is_admin = True
+        else:
+            new_is_admin = False
+        user.is_admin = new_is_admin
         db.session.commit()
         flash("Cập nhật thông tin tài khoản thành công !")
-        return redirect(url_for("users_manager", title="Quản lý tài khoản người dùng"))
+        return redirect(url_for("users_manager"))
     return render_template(
         "update_user.html", user=user, form=form, title="Cập nhật thông tin tài khoản"
     )
