@@ -1,0 +1,12 @@
+li {
+  list-style-type: none;
+}
+.max-width-content {
+  width: -webkit-fill-available;
+}
+.width-fit-content {
+  width: fit-content;
+}
+.min-width-btn {
+  min-width: 450px;
+}

@@ -31,7 +31,6 @@ class User(db.Model, UserMixin):
 
 movie_distributions = db.Table(
     "movie_distributions",
-    db.Column("id", db.Integer, primary_key=True),
     db.Column("cinema_id", db.Integer, db.ForeignKey("cinemas.id"), primary_key=True),
     db.Column("movie_id", db.Integer, db.ForeignKey("movies.id"), primary_key=True),
 )
@@ -65,12 +64,6 @@ class Movie(db.Model):
     running_time = db.Column(db.String(50), nullable=False)
     language = db.Column(db.Text)
     rated = db.Column(db.Text)
-    movie_distributions = db.relationship(
-        "Cinema",
-        secondary=movie_distributions,
-        lazy="subquery",
-        backref=db.backref("movies", lazy=True),
-    )
 
 
 class Movie_showtime(db.Model):

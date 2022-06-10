@@ -1,0 +1,65 @@
+<!-- prettier-ignore -->
+{% extends "layout.html" %}
+
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+<h1>{{title}}</h1>
+
+{% block body %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Họ tên</th>
+      <th scope="col">Email</th>
+      <th scope="col">Ngày sinh</th>
+      <th scope="col">Số điện thoại</th>
+      <th scope="col">Giới tính</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <th scope="row">{{loop.index}}</th>
+      <td>{{user.fullname}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.phone_number}}</td>
+      <td>{{user.dob}}</td>
+      <td>{{user.gender}}</td>
+      <td>
+        <a
+          href="{{url_for('update_user', id_user=user.id)}}"
+          class="btn btn-primary max-width-content"
+          role="button"
+        >
+          Sửa
+        </a>
+      </td>
+      <td>
+        <a
+          href="{{url_for('delete_user', id_user=user.id)}}"
+          class="btn btn-danger max-width-content"
+          role="button"
+        >
+          Xóa
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- prettier-ignore -->
+{% with messages = get_flashed_messages() %}
+  {% if messages[0] %} 
+  <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
+  <script>
+    alert(document.getElementById('hiddenElement').value);
+          </script>
+  {% endif %}
+{% endwith %}
+    
+{% endblock %}

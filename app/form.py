@@ -4,7 +4,6 @@ from wtforms import (
     PasswordField,
     SubmitField,
     BooleanField,
-    FloatField,
     RadioField,
     DateField,
 )
@@ -13,12 +12,11 @@ from wtforms.validators import (
     Length,
     ValidationError,
     EqualTo,
-    NumberRange,
 )
 from app.models import User
 
 
-class SignUpForm(FlaskForm):
+class UserForm(FlaskForm):
     fullname = StringField("Họ tên", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
     phone_number = StringField("Số điện thoại", validators=[DataRequired()])
@@ -26,6 +24,12 @@ class SignUpForm(FlaskForm):
     gender = RadioField(
         "Giới tính",
         choices=["Nam", "Nữ", "Khác"],
+        validators=[DataRequired()],
+    )
+    is_admin = RadioField(
+        "Quản trị viên",
+        choices=["True", "False"],
+        validators=[DataRequired()],
     )
 
     password = PasswordField(
@@ -42,7 +46,7 @@ class SignUpForm(FlaskForm):
             EqualTo("password", message="Passwords must match"),
         ],
     )
-    submit = SubmitField("Sign Up")
+    submit = SubmitField("Xong")
 
     def validate_email(self, email):
         email = User.query.filter_by(email=email.data).first()
@@ -63,4 +67,4 @@ class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
     password = PasswordField("Mật khẩu", validators=[DataRequired()])
     remember_me = BooleanField("Nhớ tài khoản")
-    submit = SubmitField("Sign In")
+    submit = SubmitField("Đăng nhập")

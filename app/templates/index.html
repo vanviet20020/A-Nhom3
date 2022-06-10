@@ -9,13 +9,15 @@
 
 {% block body %}
     <h1>{{title}}</h1>
+    
     <!-- prettier-ignore -->
     {% with messages = get_flashed_messages() %}
-        {% if messages[0] %} 
-        <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
-        <script>
-            alert(document.getElementById('hiddenElement').value);
+    {% if messages[0] %} 
+    <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
+    <script>
+        alert(document.getElementById('hiddenElement').value);
         </script>
-        {% endif %}
-    {% endwith %}
+    {% endif %}
+{% endwith %}
+
 {% endblock %}

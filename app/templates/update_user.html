@@ -11,26 +11,20 @@
 {% block body %}
 <form action="" method="post">
   {{ form.hidden_tag() }}
+  <input type="hidden" name="id_user" value="{{user.id}}" />
   <p>
     <!-- prettier-ignore -->
     {{ form.fullname.label(class="form-label") }}
-    {{ form.fullname(class="form-control") }}
+    {{ form.fullname(class="form-control", value=user.fullname) }}
     {% for error in form.fullname.errors %}
     <span style="color: red">{{ error }}</span>
     {% endfor %}
   </p>
-  <p>
-    <!-- prettier-ignore -->
-    {{ form.email.label(class="form-label") }}
-    {{ form.email(class="form-control") }}
-    {% for error in form.email.errors %}
-    <span style="color: red">{{ error }}</span>
-    {% endfor %}
-  </p>
+
   <p>
     <!-- prettier-ignore -->
     {{ form.phone_number.label(class="form-label") }}
-    {{ form.phone_number(class="form-control") }}
+    {{ form.phone_number(class="form-control", value=user.phone_number) }}
     {% for error in form.phone_number.errors %}
     <span style="color: red">{{ error }}</span>
     {% endfor %}
@@ -38,7 +32,7 @@
   <p>
     <!-- prettier-ignore -->
     {{ form.dob.label(class="form-label") }}
-    {{ form.dob(class="form-control") }}
+    {{ form.dob(class="form-control", value = user.dob) }}
     {% for error in form.dob.errors %}
     <span style="color: red">{{ error }}</span>
     {% endfor %}
@@ -57,20 +51,17 @@
   </p>
   <p>
     <!-- prettier-ignore -->
-    {{ form.password.label(class="form-label") }}
-    {{ form.password(class="form-control") }}
-    {% for error in form.password.errors %}
+    {{ form.is_admin.label(class="form-label") }}
+    {% for subfield in form.is_admin %}
+    <tr>
+      <td>{{ subfield }}</td>
+      <td>{{ subfield.label }}</td>
+    </tr>
+    {% endfor %} {% for error in form.is_admin.errors %}
     <span style="color: red">{{ error }}</span>
     {% endfor %}
   </p>
-  <p>
-    <!-- prettier-ignore -->
-    {{ form.rePassword.label(class="form-label") }}
-    {{ form.rePassword(class="form-control") }}
-    {% for error in form.rePassword.errors %}
-    <span style="color: red">{{ error }}</span>
-    {% endfor %}
-  </p>
+
   <p>{{ form.submit(class="btn btn-primary") }}</p>
 </form>
 {% endblock %}
