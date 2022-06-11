@@ -1,0 +1,84 @@
+<!-- prettier-ignore -->
+{% extends "layout.html" %}
+
+
+{% block title %}
+{{ title }}
+{% endblock %}
+{% block cdn %}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+  integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+  crossorigin=""
+/>
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script
+  src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+  integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+  crossorigin=""
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+  integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<!-- <link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"
+/> -->
+{% endblock %} {% block body %}
+<h1>{{title}}</h1>
+<div class="d-flex align-items-center">
+  <div id="mapid" style="width: 800px; height: 500px"></div>
+</div>
+<script>
+  const mymap = L.map('mapid').setView(
+    [21.02988144294546, 105.80167329310144],
+    12
+  );
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(mymap);
+
+  // Hàm xử lý hiển thị thông tin vị trí rạp phim
+  function showFeatureInfor(feature, layer) {
+    if (feature.properties) {
+      layer.bindPopup(
+        '<div><h5>' +
+          feature.properties.name +
+          '</h5><span>' +
+          feature.properties.address +
+          '</span></br><span>' +
+          feature.properties.hotline +
+          '</span><div class="d-flex justify-content-evenly"><a href="/manager/cinema/update/' +
+          feature.properties.id +
+          '" class="btn btn-primary btn-sm text-white">Cập nhật</a><a href="/manager/cinema/delete/' +
+          feature.properties.id +
+          ' class="btn btn-danger btn-sm text-white">Xóa</a></div></div>'
+      );
+    }
+  }
+
+  // Sử dụng fetchAPI để load dữ liệu sau đó xử lý và thêm lên mymap
+  fetch('http://127.0.0.1:5000/api/cinema/all')
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      L.geoJSON(data, {
+        onEachFeature: showFeatureInfor,
+      }).addTo(mymap);
+    });
+</script>
+  <!-- prettier-ignore -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages[0] %} 
+    <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
+    <script>
+        alert(document.getElementById('hiddenElement').value);
+    </script>
+    {% endif %}
+  {% endwith %}
+{% endblock %}

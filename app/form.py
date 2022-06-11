@@ -13,7 +13,7 @@ from wtforms.validators import (
     ValidationError,
     EqualTo,
 )
-from app.models import User
+from app.models import User, Cinema
 
 
 class SignUpUser(FlaskForm):
@@ -112,16 +112,34 @@ class UpdateUser(FlaskForm):
     is_admin = RadioField("Quản trị viên", choices=["True", "False"])
     submit = SubmitField("Xong")
 
-    def validate_phone(self, phone_number):
-        phone_number = User.query.filter_by(phone_number=phone_number.data).first()
-        if phone_number is not None:
-            raise ValidationError(
-                "Phone number has been already used! Please use a different phone number."
-            )
-
 
 class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
     password = PasswordField("Mật khẩu", validators=[DataRequired()])
     remember_me = BooleanField("Nhớ tài khoản")
     submit = SubmitField("Đăng nhập")
+
+
+class CreateCinemaForm(FlaskForm):
+    name = StringField("Tên rạp chiếu phim", validators=[DataRequired()])
+    address = StringField("Địa chỉ", validators=[DataRequired()])
+    hotline = StringField("Hotline", validators=[DataRequired()])
+    lng = StringField("Kinh độ", validators=[DataRequired()])
+    lat = StringField("Vĩ độ", validators=[DataRequired()])
+    submit = SubmitField("Thêm")
+
+    def validate_hotline(self, hotline):
+        hotline = Cinema.query.filter_by(hotline=hotline.data).first()
+        if hotline is not None:
+            raise ValidationError(
+                "Phone number has been already used! Please use a different phone number."
+            )
+
+
+class UpdateCinemaForm(FlaskForm):
+    name = StringField("Tên rạp chiếu phim", validators=[DataRequired()])
+    address = StringField("Địa chỉ", validators=[DataRequired()])
+    hotline = StringField("Hotline", validators=[DataRequired()])
+    lng = StringField("Kinh độ", validators=[DataRequired()])
+    lat = StringField("Vĩ độ", validators=[DataRequired()])
+    submit = SubmitField("Cập nhật")

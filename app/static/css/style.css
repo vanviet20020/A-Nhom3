@@ -10,3 +10,7 @@ li {
 .min-width-btn {
   min-width: 450px;
 }
+
+.text-white {
+  color: #fff !important;
+}
