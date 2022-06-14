@@ -5,6 +5,8 @@
 {% block title %}
 {{ title }}
 {% endblock %}
+
+
 {% block cdn %}
 <link
   rel="stylesheet"
@@ -30,9 +32,16 @@
 /> -->
 {% endblock %} {% block body %}
 <h1>{{title}}</h1>
-<div class="d-flex align-items-center">
-  <div id="mapid" style="width: 800px; height: 500px"></div>
+<div>
+  <a
+    href="{{ url_for('create_cinema')}}"
+    class="btn btn-primary mb-3  max-width-content"
+    role="button"
+  >
+    Tạo rạp chiếu phim mới
+  </a>
 </div>
+<div id="mapid" style="width: 800px; height: 500px"></div>
 <script>
   const mymap = L.map('mapid').setView(
     [21.02988144294546, 105.80167329310144],
@@ -57,7 +66,7 @@
           feature.properties.id +
           '" class="btn btn-primary btn-sm text-white">Cập nhật</a><a href="/manager/cinema/delete/' +
           feature.properties.id +
-          ' class="btn btn-danger btn-sm text-white">Xóa</a></div></div>'
+          '" class="btn btn-danger btn-sm text-white">Xóa</a></div></div>'
       );
     }
   }
@@ -75,10 +84,10 @@
   <!-- prettier-ignore -->
   {% with messages = get_flashed_messages() %}
     {% if messages[0] %} 
-    <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
-    <script>
-        alert(document.getElementById('hiddenElement').value);
-    </script>
+      <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
+      <script>
+          alert(document.getElementById('hiddenElement').value);
+      </script>
     {% endif %}
   {% endwith %}
 {% endblock %}

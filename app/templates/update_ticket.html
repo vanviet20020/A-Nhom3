@@ -1,0 +1,51 @@
+<!-- prettier-ignore -->
+{% extends "layout.html" %}
+
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block body %}
+<h1>{{title}}</h1>
+<form
+  action="{{url_for('update_ticket_success', id_ticket=id_ticket, id_movie = id_movie)}}"
+  method="post"
+>
+  <label for="">Chọn vị trí rạp</label>
+  <select name="id_user" class="form-select">
+    {% for user in users %}
+    <option value="{{ user.id }}">
+      <div>Khách hàng: {{user.fullname}}, email: {{user.email}}</div>
+    </option>
+    {% endfor %}
+  </select>
+  <label for="">Chọn vị trí rạp</label>
+  <select name="id_cinema" class="form-select">
+    {% for cinema in cinemas %}
+    <option value="{{ cinema.id }}">
+      <div>{{cinema.name}} vị trí {{cinema.address}}</div>
+    </option>
+    {% endfor %}
+  </select>
+  <label for="">Chọn thời gian</label>
+  <select name="id_movie_showtime" class="form-select">
+    {% for movie_showtime in movie_showtimes %}
+    <option value="{{ movie_showtime.id }}">
+      <div>
+        <!-- prettier-ignore -->
+        {% if movie_showtime.seats > 0 %} 
+        Ngày chiếu:{{movie_showtime.screening_date}},     
+        giờ bắt đầu:{{movie_showtime.time_start}},
+        số ghế trống: {{movie_showtime.seats}} 
+        {%endif %}
+      </div>
+    </option>
+    {% endfor %}
+  </select>
+  <label for="" class="form-label">Số vé (50.000 ngàn/1 vé)</label>
+  <input type="number" name="ticket_number" id="" step="1" min="1" max="10" />
+  <input class="btn btn-primary" type="submit" value="Xong" />
+</form>
+{% endblock %}

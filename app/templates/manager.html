@@ -1,0 +1,59 @@
+<!-- prettier-ignore -->
+{% extends "layout.html" %}
+
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block body %}
+<h1>{{title}}</h1>
+<ul>
+  <li>
+    <a
+      href="{{url_for('manager_user')}}"
+      class="btn btn-primary mt-3 max-width-content"
+      role="button"
+    >
+      Quản lý tài khoản
+    </a>
+  </li>
+  <li>
+    <a
+      href="{{url_for('manager_cinema')}}"
+      class="btn btn-primary mt-3 max-width-content"
+      role="button"
+    >
+      Quản lý rạp chiếu phim
+    </a>
+  </li>
+  <li>
+    <a
+      href="{{url_for('manager_movie')}}"
+      class="btn btn-primary mt-3 max-width-content"
+      role="button"
+    >
+      Quản lý bộ phim
+    </a>
+  </li>
+  <li>
+    <a
+      href="{{url_for('manager_movie_showtime')}}"
+      class="btn btn-primary mt-3 max-width-content"
+      role="button"
+    >
+      Quản lý xuất chiếu phim
+    </a>
+  </li>
+  <li>
+    <a
+      href="{{url_for('manager_ticket')}}"
+      class="btn btn-primary mt-3 max-width-content"
+      role="button"
+    >
+      Quản lý vé
+    </a>
+  </li>
+</ul>
+{% endblock %}

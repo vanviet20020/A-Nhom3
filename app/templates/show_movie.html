@@ -1,0 +1,57 @@
+{% extends "layout.html" %} {% block title %} Delete Movie {% endblock %} {%
+block body%}
+<h1>Delete Movie</h1>
+
+<table class="table">
+  <tr>
+    <!-- <th>#</th> -->
+    <th>ID</th>
+    <th>Têm phim</th>
+    <th>Ảnh</th>
+    <th>Mô tả</th>
+    <th>Đạo diễn</th>
+    <th>Nam chính</th>
+    <th>Thể loại</th>
+    <th>Thời lượng</th>
+    <th>Ngày công chiếu</th>
+    <th>Ngôn ngữ</th>
+    <th>Khuyến cáo</th>
+  </tr>
+  {% for movie in movies %}
+  <tr>
+    <!-- <td>
+        <input type="checkbox" value="{{movie.id}}" name="movie_ids" />
+      </td> -->
+    <td>{{movie.id}}</td>
+    <td>{{movie.name}}</td>
+    <td>{{movie.img}}</td>
+    <td>{{movie.describe}}</td>
+    <td>{{movie.director}}</td>
+    <td>{{movie.actor}}</td>
+    <td>{{movie.genre}}</td>
+    <td>{{movie.running_time}}</td>
+    <td>{{movie.release_date}}</td>
+    <td>{{movie.language}}</td>
+    <td>{{movie.rated}}</td>
+    <td>
+      <a
+        href="{{url_for('update_movie_s2', movie_id=movie.id)}}"
+        class="btn btn-primary max-width-content"
+        role="button"
+      >
+        Update
+      </a>
+    </td>
+    <td>
+      <a
+        href="{{url_for('delete_movie_resul', movie_ids=movie.id)}}"
+        class="btn btn-danger max-width-content"
+        role="button"
+      >
+        Delete
+      </a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

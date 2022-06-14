@@ -1,0 +1,32 @@
+{% extends "layout.html" %} 
+{% block title %} movie showtime {% endblock %} 
+{% block body %}
+
+
+<h2>Update movie shotime</h2>
+<div class="container" ,margin-left: 0px>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Ngày chiếu</th>
+            <th>Thời gian</th>
+            <th>Hàng ghế</th>
+            <th>Movie_ID</th>
+        </tr>
+
+        {% for movie_showtime in movie_showtimes %}
+        <tr>
+            <form action="{{ url_for('update_movie_showtime_resul') }}" method="post">
+                <td> <input name="movie_showtime_id" value="{{movie_showtime.id}}"></td></br>
+                <td> <input name="screening_date" value="{{movie_showtime.screening_date}}"></td>
+                <td> <input name="time_start" value="{{movie_showtime.time_start}}"></td>
+				<td> <input name="seats" value="{{movie_showtime.seats}}"></td>
+                <td> <input name="movie_id" value="{{movie_showtime.movie_id}}"></td>
+                <td><button class="btn btn-primary">Update</button></td>
+
+            </form>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

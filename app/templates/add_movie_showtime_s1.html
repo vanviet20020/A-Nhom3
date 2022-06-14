@@ -1,0 +1,16 @@
+{% extends "layout.html" %} {% block title %} Movie showtime {% endblock %} {%
+block body %}
+<h1>Select Movie showtime</h1>
+
+<ul>
+  {% for movie in movies %}
+  <li>
+    <a href="{{ url_for('add_movie_showtime_s2',movie_id=movie.id) }}">
+      Tên phim: {{movie.name}} Ngôn ngữ: {{movie.language}} Đánh
+      giá:{{movie.rated}}
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

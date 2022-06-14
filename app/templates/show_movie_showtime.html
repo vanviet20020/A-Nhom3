@@ -1,0 +1,39 @@
+{% extends "layout.html" %} {% block title %} Delete Subject {% endblock %} {%
+block body%}
+<h1>show Movie showtime</h1>
+<table class="table">
+  <tr>
+    <th>ID</th>
+    <th>Ngày chiếu</th>
+    <th>Thời gian</th>
+    <th>Hàng ghế</th>
+    <!-- <th>update student</th> -->
+  </tr>
+  {% for movie_showtime in movie_showtimes %}
+  <tr>
+    <td>{{movie_showtime.id}}</td>
+    <td>{{movie_showtime.screening_date}}</td>
+    <td>{{movie_showtime.time_start}}</td>
+    <td>{{movie_showtime.seats}}</td>
+    <td>
+      <a
+        href="{{url_for('update_movie_showtime_s2', movie_showtime_id=movie_showtime.id)}}"
+        class="btn btn-primary max-width-content"
+        role="button"
+      >
+        Update
+      </a>
+    </td>
+    <td>
+      <a
+        href="{{url_for('delete_movie_showtime_resul', movie_showtime_id=movie_showtime.id)}}"
+        class="btn btn-danger max-width-content"
+        role="button"
+      >
+        Delete
+      </a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

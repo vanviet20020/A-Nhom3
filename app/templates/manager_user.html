@@ -6,9 +6,24 @@
 {{ title }}
 {% endblock %}
 
-<h1>{{title}}</h1>
 
 {% block body %}
+<h1>{{title}}</h1>
+<div>
+  <form action="{{url_for('search_user')}}" class="d-flex" role="search">
+    <input
+      type="search"
+      name="search_data"
+      class="form-control me-2"
+      placeholder="Nhập tên hoặc email tài khoản"
+    />
+
+    <button type="submit" class="btn btn-outline-success">
+      <i class="fas fa-search"></i>
+    </button>
+  </form>
+</div>
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -35,7 +50,7 @@
           class="btn btn-primary max-width-content"
           role="button"
         >
-          Sửa
+          Cập nhật
         </a>
       </td>
       <td>
@@ -52,14 +67,13 @@
   </tbody>
 </table>
 
-<!-- prettier-ignore -->
-{% with messages = get_flashed_messages() %}
-  {% if messages[0] %} 
-  <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
-  <script>
-    alert(document.getElementById('hiddenElement').value);
-          </script>
-  {% endif %}
-{% endwith %}
-    
+  <!-- prettier-ignore -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages[0] %} 
+      <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
+      <script>
+        alert(document.getElementById('hiddenElement').value);
+      </script>
+    {% endif %}
+  {% endwith %}  
 {% endblock %}

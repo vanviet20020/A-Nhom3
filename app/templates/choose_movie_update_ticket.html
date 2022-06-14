@@ -1,0 +1,22 @@
+<!-- prettier-ignore -->
+{% extends "layout.html" %}
+
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block body %}
+<h1>{{title}}</h1>
+{% for movie in movies %}
+<div class="d-flex">
+  <a href="/manager/ticket/update/ticket_{{id_ticket}}/movie_{{movie.id}}">
+    <img
+      src="/static/img/{{movie.img}}"
+      alt=""
+      style="height: 260px; width: 185px"
+    />
+  </a>
+</div>
+{% endfor %}{% endblock %}

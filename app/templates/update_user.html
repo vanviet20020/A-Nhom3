@@ -6,9 +6,9 @@
 {{ title }}
 {% endblock %}
 
-<h1>{{title}}</h1>
 
 {% block body %}
+<h1>{{title}}</h1>
 <form action="" method="post">
   {{ form.hidden_tag() }}
   <input type="hidden" name="id_user" value="{{user.id}}" />

@@ -1,0 +1,30 @@
+{% extends "layout.html" %} 
+{% block title %} Update {% endblock %} 
+{% block body %}
+
+
+<h2>Update movie </h2>
+<div class="container" ,margin-left: 0px>
+
+        {% for movie in movieid %}
+        
+            <form action="{{ url_for('update_movie_resul') }}" method="post">
+                ID: <input name="movie_id" value="{{movie.id}}"></br>
+                Tên phim: <input name="name" value="{{movie.name}}"></br>
+                Ảnh: <input name="img" value="{{movie.img}}"></br>
+                Mô tả: <input name="describe" value="{{movie.describe}}"></br>
+				Đạo diễn <input name="director" value="{{movie.director}}"></br>
+                Nam chính <input name="actor" value="{{movie.actor}}"></br>
+                Thể loại <input name="genre" value="{{movie.genre}}"></br>
+                Thời lượng: <input name="running_time" value="{{movie.running_time}}"></br>
+                Ngày công chiếu <input name="release_date" type="date" value="{{movie.release_date}}"></br>
+				Ngôn ngữ <input name="language" value="{{movie.language}}"></br>
+                Đánh giá <input name="rated" value="{{movie.rated}}"></br>
+                <button class="btn btn-primary">Update</button>
+
+            </form>
+        
+        {% endfor %}
+    
+</div>
+{% endblock %}

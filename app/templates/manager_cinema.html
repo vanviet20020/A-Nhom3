@@ -6,9 +6,38 @@
 {{ title }}
 {% endblock %}
 
-<h1>{{title}}</h1>
 
 {% block body %}
+<h1>{{title}}</h1>
+<div>
+  <form action="{{url_for('search_cinema')}}" class="d-flex" role="search">
+    <input
+      type="search"
+      name="search_data"
+      class="form-control me-2"
+      placeholder="Nhập tên hoặc vị trí rạp chiếu phim"
+    />
+
+    <button type="submit" class="btn btn-outline-success">
+      <i class="fas fa-search"></i>
+    </button>
+  </form>
+  <a
+    href="{{ url_for('create_cinema')}}"
+    class="btn btn-primary mt-3 max-width-content"
+    role="button"
+  >
+    Tạo rạp chiếu phim mới
+  </a>
+  <a
+    href="{{ url_for('view_cinema_maps')}}"
+    class="btn btn-primary mt-3 max-width-content"
+    role="button"
+  >
+    Xem dưới dạng bản đồ
+  </a>
+</div>
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -31,7 +60,7 @@
           class="btn btn-primary max-width-content"
           role="button"
         >
-          Sửa
+          Cập nhật
         </a>
       </td>
       <td>
@@ -48,24 +77,13 @@
   </tbody>
 </table>
 
-<div>
-  <a
-    href="{{ url_for('create_cinema')}}"
-    class="btn btn-primary max-width-content"
-    role="button"
-  >
-    Thêm rạp chiếu phim
-  </a>
-</div>
-
-<!-- prettier-ignore -->
-{% with messages = get_flashed_messages() %}
-  {% if messages[0] %} 
-  <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
-  <script>
-    alert(document.getElementById('hiddenElement').value);
-          </script>
-  {% endif %}
-{% endwith %}
-    
+  <!-- prettier-ignore -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages[0] %} 
+      <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
+      <script>
+        alert(document.getElementById('hiddenElement').value);
+      </script>
+    {% endif %}
+  {% endwith %}
 {% endblock %}

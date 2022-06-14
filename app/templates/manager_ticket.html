@@ -1,0 +1,85 @@
+<!-- prettier-ignore -->
+{% extends "layout.html" %}
+
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block body %}
+<h1>{{title}}</h1>
+<div>
+  <form action="">
+    <div class="input-group">
+      <div class="form-outline">
+        <input
+          type="search"
+          name="cinema"
+          class="form-control"
+          placeholder="Nhập tên hoặc vị trí rạp chiếu phim"
+        />
+      </div>
+      <button type="button" class="btn btn-primary">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+  </form>
+  <a
+    href="{{ url_for('choose_movie_create_ticket')}}"
+    class="btn btn-primary mt-3 max-width-content"
+    role="button"
+  >
+    Tạo vé mới
+  </a>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Email người mua</th>
+      <th scope="col">Tên rạp</th>
+      <th scope="col">Tên phim</th>
+      <th scope="col">Ngày xem</th>
+      <th scope="col">Giờ xem</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ticket in tickets %}
+    <tr>
+      <th scope="row">{{loop.index}}</th>
+      <td>{{ticket.users.email}}</td>
+      <td>{{ticket.cinemas.name}}</td>
+      <td>{{ticket.movies.name}}</td>
+      <td>{{ticket.movie_showtimes.screening_date}}</td>
+      <td>{{ticket.movie_showtimes.time_start}}</td>
+      <td>
+        <a
+          href="{{url_for('choose_movie_update_ticket', id_ticket=ticket.id)}}"
+          class="btn btn-primary max-width-content"
+          role="button"
+        >
+          Cập nhật
+        </a>
+      </td>
+      <td>
+        <a href="{{url_for('delete_ticket', id_ticket=ticket.id)}}" class="btn btn-danger max-width-content" role="button">
+          Xóa
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- prettier-ignore -->
+{% with messages = get_flashed_messages() %}
+  {% if messages[0] %} 
+    <input type="hidden" id="hiddenElement" value="{{messages[0]}}"></input>
+    <script>
+        alert(document.getElementById('hiddenElement').value);
+    </script>
+  {% endif %}
+{% endwith %}
+
+{% endblock %}

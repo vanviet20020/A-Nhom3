@@ -1,0 +1,49 @@
+{% extends "layout.html" %} {% block title %} Movie {% endblock %} {% block body
+%}
+<h1>Add new movie</h1>
+<form action="{{ url_for('addmovie_s2') }}" method="post">
+  <div class="form-group">
+    <label for="name">Tên phim</label>
+    <input name="name" />
+  </div>
+  <div class="form-group">
+    <label for="img">Ảnh</label>
+    <input type="file" name="img" />
+  </div>
+  <div class="form-group">
+    <label for="describe">Mô tả</label>
+    <input name="describe" />
+  </div>
+  <div class="form-group">
+    <label for="director">Đạo diễn</label>
+    <input name="director" />
+  </div>
+  <div class="form-group">
+    <label for="actor">Nam chính</label>
+    <input name="actor" />
+  </div>
+  <div class="form-group">
+    <label for="genre">Thể loại</label>
+    <input name="genre" />
+  </div>
+  <div class="form-group">
+    <label for="running_time">Thời lượng</label>
+    <input name="running_time" />
+  </div>
+  <div class="form-group">
+    <label for="release_date">Ngày công chiếu</label>
+    <input type="date" name="release_date" />
+  </div>
+  <div class="form-group">
+    <label for="language">Ngôn ngữ</label>
+    <input name="language" />
+  </div>
+  <div class="form-group">
+    <label for="rated">Khuyến cáo</label>
+    <input name="rated" />
+  </div>
+  <div class="form-group">
+    <button class="btn btn-primary">Add Student</button>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "layout.html" %} {% block title %} sinh vien {% endblock %} {% block
+body %}
+<h1>
+  Tên phim: {{movie.name}} Ngôn ngữ: {{movie.language}} Đánh giá:
+  {{movie.rated}}
+</h1>
+
+<ul>
+  {% for movie_showtime in movie_showtimes %}
+  <li>
+    Ngày chiếu: {{movie_showtime.screening_date}} Thời gian:
+    {{movie_showtime.time_start}} hành ghế: {{movie_showtime.seats}}
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

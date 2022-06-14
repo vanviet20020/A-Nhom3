@@ -1,0 +1,28 @@
+{% extends "layout.html" %} {% block title %} Movie showtime {% endblock %}
+{%block body %}
+<h1>
+  Tên phim: {{movie.name}} Ngôn ngữ: {{movie.language}}Đánh giá:{{movie.rated}}
+</h1>
+<h2>Add new movie showtime</h2>
+<form action="{{ url_for('add_movie_showtime_resul') }}" method="post">
+  <div class="form-group">
+    <label for="movie_id">movie ID</label>
+    <input name="movie_id" value="{{movie.id}}" />
+  </div>
+  <div class="form-group">
+    <label for="screening_date">Ngày chiếu</label>
+    <input name="screening_date" type="date" />
+  </div>
+  <div class="form-group">
+    <label for="time_start">Thời gian</label>
+    <input name="time_start" />
+  </div>
+  <div class="form-group">
+    <label for="seats">Hành ghế</label>
+    <input name="seats" />
+  </div>
+  <div class="form-group">
+    <button class="btn btn-primary">Add Movie showtime</button>
+  </div>
+</form>
+{% endblock %}

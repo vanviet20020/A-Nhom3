@@ -40,7 +40,7 @@
       integrity="sha512-mwRt9Y/qhSlNH3VWCNNHrCwquLLU+dTbmMxVud/GcnbXfOKJ35sznUmt3yM39cMlHR2sHbV9ymIpIMDpKg4kKw=="
       crossorigin=""
     ></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
       body {
         margin: 0;
@@ -59,12 +59,15 @@
     <div id="map"></div>
 
     <script>
-      var map = L.map('map').setView([40.91, -96.63], 4);
+      var map = L.map('map').setView([21.065379, 105.76272], 15);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution:
-          '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(map);
+      var osm = L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+          attribution:
+            '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+        }
+      ).addTo(map);
 
       var searchControl = L.esri.Geocoding.geosearch({
         position: 'topright',
@@ -79,6 +82,95 @@
           results.addLayer(L.marker(data.results[i].latlng));
         }
       });
+
+      var myStyle1 = L.icon({
+        iconUrl: '/static/img/1.png',
+        iconSize: [28, 40],
+        iconAnchor: [22, 40],
+        popupAnchor: [3, 15],
+      });
+      var myStyle2 = L.icon({
+        iconUrl: '/static/img/2.png',
+        iconSize: [28, 40],
+        iconAnchor: [22, 40],
+        popupAnchor: [3, 15],
+      });
+      $.ajax({
+        url: 'http://localhost:5000/api/cinema/list',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+          geojson = data;
+          console.log(data);
+        },
+      });
+
+      var cgv = L.geoJSON(geojson, {
+        onEachFeature: onEachFeatureBuilding,
+        pointToLayer: function (feature, latlng) {
+          switch (feature.properties.name) {
+            case 'cgv':
+              return L.marker(latlng, {
+                icon: myStyle1,
+              });
+          }
+        },
+      }).addTo(map);
+      var lotte = L.geoJSON(geojson, {
+        onEachFeature: onEachFeatureBuilding,
+        pointToLayer: function (feature, latlng) {
+          switch (feature.properties.name) {
+            case 'lotte':
+              return L.marker(latlng, {
+                icon: myStyle2,
+              });
+          }
+        },
+      }).addTo(map);
+      //  thông tin đối trượng =======================================================
+      function onEachFeatureBuilding(feature, layer) {
+        if (feature.properties) {
+          layer.bindPopup(
+            '<b>ID:' +
+              feature.properties.id +
+              '<b><br></b>address:' +
+              feature.properties.address +
+              '<b><br></b>hotline:' +
+              feature.properties.hotline +
+              '<b><br></b>Rạp:' +
+              feature.properties.name
+          );
+          layer.on('click', function (e) {
+            document.querySelector('#id').value = feature.properties.id;
+            document.querySelector('#name').value = feature.properties.name;
+            document.querySelector('#diachi').value =
+              feature.properties.address;
+            document.querySelector('#hotline').value =
+              feature.properties.hotline;
+          });
+        }
+      }
+      var legend = L.control({
+        position: 'bottomright',
+      });
+      legend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info');
+        div.innerHTML +=
+          '<img style="width:30px;height:30px" src="/static/img/1.png" alt="building">: Rạp CGV<br>';
+        div.innerHTML +=
+          '<img style="width:30px;height:30px" src="/static/img/2.png" alt="tree">: Rạp Lotte<br>';
+        return div;
+      };
+      legend.addTo(map);
+
+      var baseLayers = {
+        'open street map ': osm,
+      };
+      var overlayMaps = {
+        CGV: cgv,
+        Lotte: lotte,
+      };
+      L.control.layers(baseLayers, overlayMaps).addTo(map);
     </script>
   </body>
 </html>
