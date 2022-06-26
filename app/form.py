@@ -96,13 +96,6 @@ class CreateCinemaForm(FlaskForm):
     lat = StringField("Vĩ độ", validators=[DataRequired()])
     submit = SubmitField("Thêm")
 
-    def validate_hotline(self, hotline):
-        hotline = Cinema.query.filter_by(hotline=hotline.data).first()
-        if hotline is not None:
-            raise ValidationError(
-                "Phone number has been already used! Please use a different phone number."
-            )
-
 
 class UpdateCinemaForm(FlaskForm):
     name = StringField("Tên rạp chiếu phim", validators=[DataRequired()])

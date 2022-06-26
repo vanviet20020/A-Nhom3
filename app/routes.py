@@ -73,9 +73,7 @@ def logout():
 @app.route("/manager/user")
 @login_required
 def manager_user():
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -91,15 +89,13 @@ def delete_user(id_user):
     db.session.delete(user)
     db.session.commit()
     flash("Xóa tài khoản thành công")
-    return redirect(url_for("user_manager"))
+    return redirect(url_for("manager_user"))
 
 
 @app.route("/manager/user/update/<int:id_user>", methods=["GET", "POST"])
 @login_required
 def update_user(id_user):
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -113,20 +109,20 @@ def update_user(id_user):
             ).first()
             # Kiểm tra số điện thoại cập nhật đã xử dụng chưa
             if user_check is not None and user_check.phone_number != user.phone_number:
+                flash("Số điện thoại đã có người sử dụng. Vui lòng dùng số khác!")
                 return redirect(url_for("update_user", id_user=id_user))
             user.fullname = form.fullname.data
             user.phone_number = form.phone_number.data
             user.dob = form.dob.data
             user.gender = form.gender.data
-            is_admin = form.is_admin.data
-            if is_admin == "True":
+            if form.is_admin.data == "True":
                 new_is_admin = True
             else:
                 new_is_admin = False
             user.is_admin = new_is_admin
             db.session.commit()
             flash("Cập nhật thông tin tài khoản thành công !")
-            return redirect(url_for("user_manager"))
+            return redirect(url_for("manager_user"))
         return render_template(
             "update_user.html",
             user=user,
@@ -138,9 +134,7 @@ def update_user(id_user):
 @app.route("/manager/cinema")
 @login_required
 def manager_cinema():
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -153,9 +147,7 @@ def manager_cinema():
 @app.route("/manager/cinema/create", methods=["GET", "POST"])
 @login_required
 def create_cinema():
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -164,6 +156,7 @@ def create_cinema():
             name = form.name.data
             address = form.address.data
             hotline = form.hotline.data
+            # lấy gtri lat long và gán vào biến geoCinema dưới dạng điểm
             geomCinema = "Point(" + form.lng.data + " " + form.lat.data + ")"
             new_cinema = Cinema(
                 name=name,
@@ -217,9 +210,7 @@ def view_cinema_maps():
 @app.route("/manager/cinema/update/<int:id_cinema>", methods=["GET", "POST"])
 @login_required
 def update_cinema(id_cinema):
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -227,12 +218,6 @@ def update_cinema(id_cinema):
         if form.validate_on_submit():
             id_cinema = int(request.form.get("id_cinema"))
             cinema = Cinema.query.get(id_cinema)
-            cinema_check = Cinema.query.filter_by(hotline=form.hotline.data).first()
-            # Kiểm tra hotline cập nhật đã xử dụng chưa
-            if cinema_check is not None and cinema_check.hotline != cinema.hotline:
-                flash("Invalid username or password")
-                return redirect(url_for("update_cinema", id_cinema=id_cinema))
-
             new_name = form.name.data
             new_address = form.address.data
             new_hotline = form.hotline.data
@@ -257,9 +242,7 @@ def update_cinema(id_cinema):
 @app.route("/manager/cinema/delete/<int:id_cinema>")
 @login_required
 def delete_cinema(id_cinema):
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -273,9 +256,7 @@ def delete_cinema(id_cinema):
 @app.route("/manager/ticket")
 @login_required
 def manager_ticket():
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -290,9 +271,7 @@ def manager_ticket():
 @app.route("/manager/ticket/create/movie")
 @login_required
 def choose_movie_create_ticket():
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -305,9 +284,7 @@ def choose_movie_create_ticket():
 @app.route("/manager/ticket/create/<int:id_movie>")
 @login_required
 def create_ticket(id_movie):
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -356,9 +333,7 @@ def create_ticket_success(id_movie):
 @app.route("/manager/ticket/update/movie/ticket_<int:id_ticket>")
 @login_required
 def choose_movie_update_ticket(id_ticket):
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -374,9 +349,7 @@ def choose_movie_update_ticket(id_ticket):
 @app.route("/manager/ticket/update/ticket_<int:id_ticket>/movie_<int:id_movie>")
 @login_required
 def update_ticket(id_ticket, id_movie):
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -431,9 +404,7 @@ def update_ticket_success(id_ticket, id_movie):
 @app.route("/manager/ticket/delete/<int:id_ticket>")
 @login_required
 def delete_ticket(id_ticket):
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -486,6 +457,25 @@ def search_cinema():
         return redirect(url_for("manager_cinema"))
 
 
+# @app.route("/manager/ticket/search")
+# def search_ticket():
+#     search_data = request.args.get("search_data")
+#     tickets = Ticket.query.all()
+#     ticket_searchs = []
+#     for ticket in tickets:
+#         email_user = ticket.users.email
+#         movie_name = ticket.movies.name
+#         if email_user.find(search_data) != -1 or movie_name.find(search_data) != -1:
+#             ticket_searchs.append(ticket)
+#     if len(ticket_searchs) >= 1:
+#         return render_template(
+#             "manager_ticket.html", tickets=ticket_searchs, title="Quản lý tài khoản"
+#         )
+#     else:
+#         flash("Không tìm thấy giá trị nhập")
+#         return redirect(url_for("manager_ticket"))
+
+
 # ---------Toàn---------
 # ---------- Add new movie ----------------
 
@@ -493,9 +483,7 @@ def search_cinema():
 @app.route("/addmovie_s1")
 @login_required
 def addmovie_s1():
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -540,9 +528,7 @@ def addmovie_s2():
 @app.route("/show_movie")
 @login_required
 def show_movie():
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -623,10 +609,7 @@ def find_movie_resul():
 @app.route("/add_movie_showtime_s1")
 @login_required
 def add_movie_showtime_s1():
-
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -668,9 +651,7 @@ def add_movie_showtime_resul():
 @app.route("/show_movie_showtime")
 @login_required
 def show_movie_showtime():
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -787,7 +768,7 @@ def read_cinema_list():
     return jsonify({"features": cinemasFeatures})
 
 
-@app.route("/api/ciema/view")
+@app.route("/api/cinema/view")
 def api_ciema_view():
     return render_template("geodata.html")
 
@@ -796,9 +777,7 @@ def api_ciema_view():
 @app.route("/manager")
 @login_required
 def manager():
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -808,9 +787,7 @@ def manager():
 @app.route("/manager/movie")
 @login_required
 def manager_movie():
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:
@@ -820,9 +797,7 @@ def manager_movie():
 @app.route("/manager/movie_showtime")
 @login_required
 def manager_movie_showtime():
-    id_user = current_user.get_id()
-    user = User.query.get(id_user)
-    if user.is_admin == False:
+    if current_user.is_admin == False:
         flash("Bạn không có quyền truy cập vào trang web này!")
         return redirect(url_for("index"))
     else:

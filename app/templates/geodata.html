@@ -56,10 +56,15 @@
     </style>
   </head>
   <body>
-    <div id="map"></div>
-
+    <div id="map" style="width: 800px; height: 500px"></div>
+    <button onclick="getLocation()" style="margin-top: 500px">
+      where i am
+    </button>
     <script>
-      var map = L.map('map').setView([21.065379, 105.76272], 15);
+      const map = L.map('map').setView(
+        [21.02988144294546, 105.80167329310144],
+        11
+      );
 
       var osm = L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -69,31 +74,13 @@
         }
       ).addTo(map);
 
-      var searchControl = L.esri.Geocoding.geosearch({
-        position: 'topright',
-        placeholder: 'Enter an address or place e.g. 1 York St',
-      }).addTo(map);
-
-      var results = L.layerGroup().addTo(map);
-
-      searchControl.on('results', function (data) {
-        results.clearLayers();
-        for (var i = data.results.length - 1; i >= 0; i--) {
-          results.addLayer(L.marker(data.results[i].latlng));
-        }
-      });
-
       var myStyle1 = L.icon({
         iconUrl: '/static/img/1.png',
-        iconSize: [28, 40],
-        iconAnchor: [22, 40],
-        popupAnchor: [3, 15],
+        iconSize: [24, 36],
       });
       var myStyle2 = L.icon({
         iconUrl: '/static/img/2.png',
         iconSize: [28, 40],
-        iconAnchor: [22, 40],
-        popupAnchor: [3, 15],
       });
       $.ajax({
         url: 'http://localhost:5000/api/cinema/list',
@@ -140,14 +127,14 @@
               '<b><br></b>Rạp:' +
               feature.properties.name
           );
-          layer.on('click', function (e) {
-            document.querySelector('#id').value = feature.properties.id;
-            document.querySelector('#name').value = feature.properties.name;
-            document.querySelector('#diachi').value =
-              feature.properties.address;
-            document.querySelector('#hotline').value =
-              feature.properties.hotline;
-          });
+          // layer.on('click', function (e) {
+          //   document.querySelector('#id').value = feature.properties.id;
+          //   document.querySelector('#name').value = feature.properties.name;
+          //   document.querySelector('#diachi').value =
+          //     feature.properties.address;
+          //   document.querySelector('#hotline').value =
+          //     feature.properties.hotline;
+          // });
         }
       }
       var legend = L.control({
@@ -171,6 +158,21 @@
         Lotte: lotte,
       };
       L.control.layers(baseLayers, overlayMaps).addTo(map);
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        }
+      }
+
+      function showPosition(position) {
+        L.marker([position.coords.latitude, position.coords.longitude])
+
+          .addTo(map)
+
+          .bindPopup('<b>i an here</b>')
+
+          .openPopup();
+      }
     </script>
   </body>
 </html>

@@ -35,13 +35,15 @@
 <div>
   <a
     href="{{ url_for('create_cinema')}}"
-    class="btn btn-primary mb-3  max-width-content"
+    class="btn btn-primary mb-3 max-width-content"
     role="button"
   >
     Tạo rạp chiếu phim mới
   </a>
 </div>
 <div id="mapid" style="width: 800px; height: 500px"></div>
+<button onclick="getLocation()" class="btn btn-info">Vị trí của tôi</button>
+
 <script>
   const mymap = L.map('mapid').setView(
     [21.02988144294546, 105.80167329310144],
@@ -80,6 +82,23 @@
         onEachFeature: showFeatureInfor,
       }).addTo(mymap);
     });
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    }
+  }
+
+  function showPosition(position) {
+    L.marker([position.coords.latitude, position.coords.longitude])
+
+      .addTo(mymap)
+
+      .bindPopup(
+        '<b>Vị trí của bạn</b>'
+      )
+
+      .openPopup();
+  }
 </script>
   <!-- prettier-ignore -->
   {% with messages = get_flashed_messages() %}

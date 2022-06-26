@@ -40,6 +40,7 @@ class Cinema(db.Model):
     __tablename__ = "cinemas"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
+    # type = db.Column(db.String(25), nullable=False)
     address = db.Column(db.String(255), nullable=False)
     hotline = db.Column(db.String(20))
     geom = db.Column(Geometry("POINT"))
@@ -78,7 +79,9 @@ class Movie_showtime(db.Model):
     seats = db.Column(db.Integer)
     movie_id = db.Column(db.Integer, db.ForeignKey("movies.id"), nullable=False)
     tickets = db.relationship(
-        "Ticket", backref="movie_showtimes", lazy=True, uselist=False
+        "Ticket",
+        backref="movie_showtimes",
+        lazy=True,
     )
 
 
@@ -86,7 +89,7 @@ class Ticket(db.Model):
     __tablename__ = "tickets"
     id = db.Column(db.Integer, primary_key=True)
     price = db.Column(db.String, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     cinema_id = db.Column(db.Integer, db.ForeignKey("cinemas.id"), nullable=False)
     movie_id = db.Column(db.Integer, db.ForeignKey("movies.id"), nullable=False)
     movie_showtime_id = db.Column(
